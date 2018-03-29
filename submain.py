@@ -48,36 +48,36 @@ class GeoMagSensor:
         fo.write("x     y     z")
         fo.write('\n'.join([''.join(['{:3}'.format(item) for item in row]) for row in self.data]))        
 
-    def direction_to_B(self, point p):
-        if p.x > 0 && p.z < 0:
+    def direction_to_B(self, p):
+        if p.x > 0 and p.z < 0:
             print "West"
-        elif p.x < 0 && p.z < 0:
+        elif p.x < 0 and p.z < 0:
             print "North_West"
-        elif p.x < 0 && p.z > 0:
+        elif p.x < 0 and p.z > 0:
             print "North"
 
-        elif p.x > 0 && p.z > 0:
+        elif p.x > 0 and p.z > 0:
             print "North-West"
 
         else:
             "Uknown"
 
-    def direction_to_C(self, point p ):
-        if p.x < 0 && p.z > 0
+    def direction_to_C(self, p ):
+        if p.x < 0 and p.z > 0:
             print "North-East"
-        elif p.x < 0 && p.z <:
+        elif p.x < 0 and p.z < 0:
             print "North"
-        elif p.x > 0 && p.z > 0:
+        elif p.x > 0 and p.z > 0:
             print "North-West"
         else:
             "Uknown"
 
-    def direction_to_D(self):
-        if p.x < 0 && p.z > 0
+    def direction_to_D(self, p):
+        if p.x < 0 and p.z > 0:
             print "East"
-        elif p.x > 0 && p.z <:
+        elif p.x > 0 and p.z < 0:
             print "South"
-        elif p.x > 0 && p.z > 0:
+        elif p.x > 0 and p.z > 0:
             print "South-East"
         else:
             "Uknown"
@@ -127,13 +127,13 @@ def main():
    # Grid.getGrid()
     # Grid.printGrid()
     fo.close()
+    while 1:
+        punto = GeoMagSensor.getData(1)
+
+        GeoMagSensor.direction_to_C(punto)
 
 
-while 1:
 
-   punto = GeoMagSensor.getData(1)
-
-   GeoMagSensor.direction_to_C(punto)
 
 
 if __name__ == '__main__':
