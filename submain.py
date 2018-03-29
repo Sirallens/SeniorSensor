@@ -10,6 +10,11 @@ port = '/dev/ttyUSB1'
 
 fo = open("Plain.txt", "w+")
 
+choices = {'a': 1, 'b': 2}
+
+
+
+
 def H2D(v):
     if v > 8388607:
         return v - 16777216
@@ -43,12 +48,49 @@ class GeoMagSensor:
         fo.write("x     y     z")
         fo.write('\n'.join([''.join(['{:3}'.format(item) for item in row]) for row in self.data]))        
 
-    def getData(self):
+    def direction_to_B(self, point p):
+        if p.x > 0 && p.z < 0:
+            print "West"
+        elif p.x < 0 && p.z < 0:
+            print "North_West"
+        elif p.x < 0 && p.z > 0:
+            print "North"
+
+        elif p.x > 0 && p.z > 0:
+            print "North-West"
+
+        else:
+            "Uknown"
+
+    def direction_to_C(self, point p ):
+        if p.x < 0 && p.z > 0
+            print "North-East"
+        elif p.x < 0 && p.z <:
+            print "North"
+        elif p.x > 0 && p.z > 0:
+            print "North-West"
+        else:
+            "Uknown"
+
+    def direction_to_D(self):
+        if p.x < 0 && p.z > 0
+            print "East"
+        elif p.x > 0 && p.z <:
+            print "South"
+        elif p.x > 0 && p.z > 0:
+            print "South-East"
+        else:
+            "Uknown"
+
+
+
+    
+    def getData(self, k = 100):
         
         x = 0
         y = 0
         z = 0
-        for x in range(100):
+        for x in range(k):
             #------Get one Measurement command----
             command = read_command
             self.s.write(command.encode())
@@ -82,9 +124,17 @@ class GeoMagSensor:
 def main():
     # main function
     Grid = GeoMagSensor(port)
-    Grid.getGrid()
-    Grid.printGrid()
+   # Grid.getGrid()
+    # Grid.printGrid()
     fo.close()
+
+
+while 1:
+
+   punto = GeoMagSensor.getData(1)
+
+   GeoMagSensor.direction_to_C(punto)
+
 
 if __name__ == '__main__':
     main()
