@@ -6,7 +6,7 @@ read_command = "$0wn00,70$1"
 get_x = "$0wnA4rm$1"
 get_y = "$0wnA7rm$1"
 get_z = "$0wnAArm$1"
-port = '/dev/ttyUSB1'
+port = '/dev/ttyUSB0'
 
 fo = open("Plain.txt", "w+")
 
