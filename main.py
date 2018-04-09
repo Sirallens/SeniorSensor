@@ -39,7 +39,7 @@ class GeoMagSensor:
                 raw_input("Move the sensor to the next position and hit enter when ready.")
         
     def printGrid(self):
-        print('\n'.join([''.join(['{:3}'.format(item) for item in row]) for row in self.data]))
+        print '\n'.join([''.join(['{:3}'.format(item) for item in row]) for row in self.data])
         fo.write("x     y     z")
         fo.write('\n'.join([''.join(['{:3}'.format(item) for item in row]) for row in self.data]))        
 
