@@ -6,7 +6,7 @@ read_command = "$0wn00,70$1"
 get_x = "$0wnA4rm$1"
 get_y = "$0wnA7rm$1"
 get_z = "$0wnAArm$1"
-port = '/dev/ttyUSB1'
+port = '/dev/ttyUSB0'
 
 fo = open("Plain.txt", "w+")
 
@@ -74,26 +74,27 @@ class GeoMagSensor:
             self.s.write(command.encode())
             respuesta = self.s.read(6)
             time.sleep(.05)
-            x += H2D(int(respuesta.decode('utf-8'),16))
+            x = H2D(int(respuesta.decode('utf-8'),16))
             time.sleep(.05)
 
             command = get_y
             self.s.write(command.encode())
             respuesta = self.s.read(6)
             time.sleep(.05)
-            y += H2D(int(respuesta.decode('utf-8'),16))
+            y = H2D(int(respuesta.decode('utf-8'),16))
             time.sleep(.05)
             
             command = get_z
             self.s.write(command.encode())
             respuesta = self.s.read(6)
             time.sleep(.05)
-            z += H2D(int(respuesta.decode('utf-8'),16))
+            z = H2D(int(respuesta.decode('utf-8'),16))
             time.sleep(2)
-
             
-        fo.write(  " " + str(x/10) + "  " + str(y/10) + "   " + str(z/10) + " " + str(magnitude(x,y, z)) + '\n')
-        p = point(x/k,y/k,z/k)
+            fo.write(  str(x) + "  " + str(y) + "  " + str(z) + " " + str(magnitude(x,y, z)) + '\n')
+            print str(x) + "  " + str(y) + "  " + str(z) + " " + str(magnitude(x,y, z)) + '\n'
+        
+        p = point(x,y,z)
         print(p)
         return p
                 

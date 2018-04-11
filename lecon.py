@@ -14,6 +14,8 @@ def H2D(x):
 def teslas(t):
     q = float(75)
     #format((float(t)/q), '.4f')
+
+    
     return (float(t)/q)*float(1000)
 
 def magnitude(a, b, c):
@@ -30,7 +32,7 @@ get_z = "$0wnAArm$1"
  
 get_all = "$0wnA4mmm$1"
  
-port = '/dev/ttyUSB1'
+port = '/dev/ttyUSB0'
  
 fo = open("data.txt", "w+")
  
@@ -55,7 +57,7 @@ except:
     raise
     
 
-s.write("$0wn04,00,C8,00,C8,00,C8$1") 
+s.write("$0wn04,00,190,00,190,00,190$1") 
 #-----------------------------------------------------------
 s.write("$0r84nii$1")
 
