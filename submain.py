@@ -1,12 +1,14 @@
 import os, serial, time, math
 
 # Commands
-read_command = "$0wn00,70$1"
+read_command = "$0wn01,71$1"
 
 get_x = "$0wnA4rm$1"
 get_y = "$0wnA7rm$1"
 get_z = "$0wnAArm$1"
 port = '/dev/ttyUSB0'
+
+change_cc = "$0wn04,00,64,00,64,00,64$1"
 
 fo = open("Plain.txt", "w+")
 
@@ -19,11 +21,11 @@ def magnitude(a, b, c):
 # Esta funcion, junto con teslas(t), convierte 3 bytes Hexadecimal y decimal y posteriomente a nanoteslas
 def H2D(v):
     if v > 8388607:
-        v =  v - 16777216
+        return v - 16777216
     return teslas(v)
 
 def teslas(t): #To nano Teslas
-    q = float(75)
+    q = float(38)
     return (float(t)/q)*float(1000)
 #--------
 
@@ -46,28 +48,28 @@ class GeoMagSensor:
         raw_input("Start the sensor at the bottm left of the grid, hit enter when ready.")
         for i in range(2):
             row = []
-            for j in range(4):
+            for j in range(3):
                 row.append(self.getData())
                 raw_input("Move the sensor to the next position and hit enter when ready.")
         
     def printGrid(self):
-        print '\n'.join([''.join(['{:3}'.format(item) for item in row]) for row in self.data])
+        print ('\n'.join([''.join(['{:3}'.format(item) for item in row]) for row in self.data]))
         
         
     
 
     
-    def getData(self, k = 10):
+    def getData(self, k = 1):
         
         x = 0
         y = 0
         z = 0
-        
+        self.s.write(read_command.encode())
         for x in range(k):
             #------Get one Measurement command---- Currently in continuos measurement mode; 
-            command = read_command
-            self.s.write(command.encode())
-            time.sleep(.05)
+            #command = read_command
+            #self.s.write(command.encode())
+            #time.sleep(.05)
             #------------ Ends Measurement Command---
             #retrieve data
             command = get_x
@@ -89,11 +91,9 @@ class GeoMagSensor:
             respuesta = self.s.read(6)
             time.sleep(.05)
             z = H2D(int(respuesta.decode('utf-8'),16))
-            time.sleep(2)
+
             
-            fo.write(  str(x) + "  " + str(y) + "  " + str(z) + " " + str(magnitude(x,y, z)) + '\n')
-            print str(x) + "  " + str(y) + "  " + str(z) + " " + str(magnitude(x,y, z)) + '\n'
-        
+        fo.write(  "x= " + str(x) + "  y= " + str(y) + "  z= " + str(z) + "  magnitude = " + str(magnitude(x,y, z)) + '/n')
         p = point(x,y,z)
         print(p)
         return p

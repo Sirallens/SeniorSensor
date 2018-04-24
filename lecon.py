@@ -3,6 +3,14 @@ import os
 import serial
 import math
 import time
+import numbers
+
+
+
+
+# Gain = 0.3671 * cycleCount + 1.5
+
+
 
 def H2D(x):
     if x >8388607:
@@ -11,18 +19,16 @@ def H2D(x):
  
     return x
 
+#0.3671 * cycleCount + 1.5
 def teslas(t):
     q = float(75)
-    #format((float(t)/q), '.4f')
-
-    
-    return (float(t)/q)*float(1000)
+    return round(((float(t)/q)*float(1)), 3)
 
 def magnitude(a, b, c):
     return math.sqrt(a*a + b*b + c*c)
 
 
-read_command = "$0wn00,70$1"
+read_command = "$0wn01,71$1"
  
 get_x = "$0wnA4rm$1"
  
@@ -32,7 +38,7 @@ get_z = "$0wnAArm$1"
  
 get_all = "$0wnA4mmm$1"
  
-port = '/dev/ttyUSB0'
+port = "COM10"
  
 fo = open("data.txt", "w+")
  
@@ -40,28 +46,22 @@ fo = open("data.txt", "w+")
 command = " "
 s = serial.Serial(port, 115200, timeout=1)
 
-try:
+
  
-    if s.isOpen() == False:
-        s.open()
-    else:
-        s.close()    
-        s.open()
-except:
-    s.port = '/dev/ttyUSB1'
-    if s.isOpen() == False:
-        s.open()
-    else:
-        s.close()    
-        s.open()     
-    raise
-    
+if s.isOpen() == False:
+    s.open()
+else:
+    s.close()    
+    s.open()
+ 
+ 
+    k = 100
 
-s.write("$0wn04,00,190,00,190,00,190$1") 
+
 #-----------------------------------------------------------
-s.write("$0r84nii$1")
 
-print(str(s.read(16)))
+
+
 
 time.sleep(3)
 
@@ -73,9 +73,7 @@ time.sleep(.05)
  
 while 1:
     #------Get one Measurement command----
-    command = read_command
-    s.write(command.encode())
-    time.sleep(.05)
+    
     #------------ Ends Measurement Command---
  
     #retrieve data
@@ -85,14 +83,17 @@ while 1:
     respuesta = s.read(6)
     time.sleep(.05)
     x = H2D(int(respuesta.decode('utf-8'),16))
+    x = round(x, 6)
+    
     time.sleep(.05)
- 
+    
+
     command = get_y
     s.write(command.encode())
     respuesta = s.read(6)
     time.sleep(.05)
     y = H2D(int(respuesta.decode('utf-8'),16))
- 
+    y = round(y, 1)
  
     time.sleep(.05)
     command = get_z
@@ -101,14 +102,17 @@ while 1:
     time.sleep(.05)
     z = H2D(int(respuesta.decode('utf-8'),16))
     
+    z= round(z, 1)
     
 
-    os.system("clear")
+    os.system("cls")
 
+    m = magnitude(teslas(x), teslas(y), teslas(z))
+    m = round(m, 1)
+    
 
-
-    print(  "x= " + str(teslas(x)) + "  y= " + str(teslas(y)) + "  z= " + str(teslas(z)) + "  magnitude = " + str(magnitude(teslas(x), teslas(y), teslas(z))))
-    fo.write( " " + str(teslas(x)) + "   " + str(teslas(y)) + "   " + str(teslas(z)) + " " + str(magnitude(teslas(x), teslas(y), teslas(z))))
+    print(  "x= " + str(teslas(x)) + "  y= " + str(teslas(y)) + "  z= " + str(teslas(z)) + "  magnitude = " + str(m))
+    
     
    
 fo.close()
